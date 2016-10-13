@@ -33,7 +33,11 @@ select id_prac, nazwisko, etat, placa_pod
 from pracownicy where placa_pod < 700
 with check OPTION constraint za_wysoka_placa;
 
-
+--zad 5
+update place_minimalne set placa_pod = 800 where nazwisko = 'HAPKE';
+--output: update place_minimalne set placa_pod = 800 where nazwisko = 'HAPKE'
+--BŁĄD w linii 1: 
+--ORA-01402: naruszenie klauzuli WHERE dla perspektywy z WITH CHECK OPTION 
 
 
 
