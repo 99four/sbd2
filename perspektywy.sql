@@ -39,6 +39,47 @@ update place_minimalne set placa_pod = 800 where nazwisko = 'HAPKE';
 --BŁĄD w linii 1: 
 --ORA-01402: naruszenie klauzuli WHERE dla perspektywy z WITH CHECK OPTION 
 
+--zad 6
+create or replace view prac_szef as
+select id_prac, id_szefa, nazwisko as pracownik, etat,
+(select nazwisko from pracownicy where id_prac = p.id_szefa)
+as szef
+from pracownicy p;
 
+--zad 7
+create or replace view zarobki as
+select id_prac, nazwisko, etat, placa_pod
+from pracownicy p
+where
+(select placa_pod from pracownicy where id_prac = p.id_szefa)
+>
+p.placa_pod
+with check option constraint too_high_salary;
 
+--zad 8
+select column_name, updatable, insertable, deletable
+from USER_UPDATABLE_COLUMNS
+where table_name = 'PRAC_SZEF';
+
+--zad 9
+SELECT ROWNUM, T.rnum, T.nazwisko, T.etat, T.pensja
+FROM (
+SELECT ROWNUM AS rnum,
+nazwisko, etat, placa_pod AS pensja
+FROM pracownicy ORDER BY pensja DESC ) T
+WHERE ROWNUM < 4;
+
+--zad 10
+SELECT Z.rnm as ranking, Z.nazwisko, Z.placa_pod, Z.etat FROM (
+	SELECT ROWNUM as rnm, T.rnum, T.nazwisko, T.etat, T.placa_pod
+	FROM (
+		SELECT ROWNUM AS rnum,
+		nazwisko, etat, placa_pod
+		FROM pracownicy ORDER BY placa_pod DESC 
+	) T
+	WHERE ROWNUM <= 10
+	ORDER BY T.placa_pod ASC
+) Z 
+WHERE ROWNUM <= 5
+ORDER BY Z.placa_pod DESC;
 
