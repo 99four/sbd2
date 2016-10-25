@@ -140,9 +140,9 @@ DECLARE
   v_dayOfWeek NUMBER;
 BEGIN
   LOOP
-    SELECT to_char (v_myDate, 'D') D INTO v_dayOfWeek FROM dual;
+    SELECT to_char(v_myDate, 'D') INTO v_dayOfWeek FROM dual;
     IF v_dayOfWeek = 5 and (EXTRACT(DAY FROM v_myDate) = 13) THEN
-      dbms_output.put_line('Piatek 13 to: ' || v_myDate);
+      dbms_output.put_line(TO_CHAR(v_myDate, 'dd-mm-yyyy'));
     END IF;
     IF v_myDate = v_endDate THEN
       EXIT;
