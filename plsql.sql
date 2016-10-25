@@ -62,7 +62,17 @@ BEGIN
 END;
 
 --zad 7
+DECLARE
+  SUBTYPE PIENIADZE IS NUMBER(9,2);
+  v_nazwisko PRACOWNICY.NAZWISKO%TYPE;
+  v_pensja PIENIADZE;
+BEGIN
+  SELECT nazwisko, (12*placa_pod) INTO v_nazwisko, v_pensja
+  FROM PRACOWNICY
+  WHERE NAZWISKO='SLOWINSKI';
 
+  dbms_output.put_line('Pracownik ' || v_nazwisko || ' zarabia rocznie ' || v_pensja);
+END;
 
 --zad 8
 DECLARE
@@ -111,34 +121,33 @@ END;
 --zad 11
 DECLARE
   v_num NUMBER(32) := &input;
-  v_silnia NUMBER(32) := 1;
+  v_factorial NUMBER(32) := 1;
 BEGIN
   IF v_num = 0 OR v_num = 1 THEN
-    dbms_output.put_line('Silnia dla n=' || v_num || ': '  || v_silnia);
+    dbms_output.put_line('Silnia dla n=' || v_num || ': '  || v_factorial);
   ELSE
     FOR i IN 1 .. v_num LOOP
-      v_silnia := v_silnia * i;
+      v_factorial := v_factorial * i;
     END LOOP;
   END IF;
-  dbms_output.put_line('Silnia dla n=' || v_num || ': '  || v_silnia);
+  dbms_output.put_line('Silnia dla n=' || v_num || ': '  || v_factorial);
 END;
 
 --zad 12
 DECLARE
-  v_startDate DATE := '2000-01-01';
+  v_myDate DATE := '2000-01-01';
   v_endDate DATE := '2100-12-31';
   v_dayOfWeek NUMBER;
-  v_dayOfMonth NUMBER;
 BEGIN
   LOOP
-    SELECT to_char (v_startDate, 'D') D INTO v_dayOfWeek FROM dual;
-    IF v_dayOfWeek = 5 and (EXTRACT(DAY FROM v_startDate) = 13) THEN
-      dbms_output.put_line('Piatek 13 to: ' || v_startDate);
+    SELECT to_char (v_myDate, 'D') D INTO v_dayOfWeek FROM dual;
+    IF v_dayOfWeek = 5 and (EXTRACT(DAY FROM v_myDate) = 13) THEN
+      dbms_output.put_line('Piatek 13 to: ' || v_myDate);
     END IF;
-    IF v_startDate = v_endDate THEN
+    IF v_myDate = v_endDate THEN
       EXIT;
     END IF;
     
-    v_startDate := v_startDate + 1;
+    v_myDate := v_myDate + 1;
   END LOOP;
 END;
