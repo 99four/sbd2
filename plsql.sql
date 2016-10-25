@@ -99,7 +99,7 @@ BEGIN
       SELECT to_char(CURRENT_TIMESTAMP, 'HH24:MI:SS' ) INTO v_time FROM DUAL;
       dbms_output.put_line(v_time);
     WHEN 'DATE' THEN
-      dbms_output.put_line(SYSDATE());
+      dbms_output.put_line(TO_CHAR(SYSDATE, 'dd-mm-yyyy'));
     ELSE
       dbms_output.put_line('Nie rozpoznano wyboru!');
     END CASE;
