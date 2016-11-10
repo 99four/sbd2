@@ -17,7 +17,7 @@ EXCEPTION
 end;
 /
 
---zad 2
+-- zad 2
 declare
   cursor c_szefowie is 
 	select s.id_prac, s.nazwisko as szef, s.placa_pod as placa_szefa,
@@ -37,5 +37,60 @@ begin
     		where ID_PRAC = szef.id_prac;
 		end if;
     end loop;
+end;
+/
+
+-- zad 3
+declare
+  p_id_prac number;
+  p_id_zesp number;
+  p_nazwisko varchar(100);
+  p_placa_pod number;
+  PRIMARY_KEY_DUPLICATE exception;
+  pragma exception_init(PRIMARY_KEY_DUPLICATE, -1);
+  WORKER_ID_DOESNT_EXIST exception;
+  pragma exception_init(WORKER_ID_DOESNT_EXIST, -1400);
+  TOO_LOW_SALARY exception;
+  pragma exception_init(TOO_LOW_SALARY, -2290);
+  TEAM_DOESNT_EXIST exception;
+  pragma exception_init(TEAM_DOESNT_EXIST, -2291);
+begin
+  p_id_prac := '&id_prac';
+  p_id_zesp := &id_zesp;
+  p_nazwisko := '&nazwisko';
+  p_placa_pod := &placa_pod;
+  insert into pracownicy (id_prac, id_zesp, nazwisko, placa_pod)
+    values (p_id_prac, p_id_zesp, p_nazwisko, p_placa_pod);
+exception
+  when PRIMARY_KEY_DUPLICATE then  
+    dbms_output.put_line('id pracownika nie jest unikalne!');
+  when TOO_LOW_SALARY then
+    dbms_output.put_line('płaca podstawowa musi być większa niż 101!');
+  when WORKER_ID_DOESNT_EXIST then
+    dbms_output.put_line('nie podano id pracownika, które jest wymagane!');
+  when TEAM_DOESNT_EXIST then
+    dbms_output.put_line('podany zespół nie istnieje!');
+end;
+/
+
+-- zad 4
+declare
+  p_nazwisko varchar(100);
+  p_count number;
+  SUPERIOR exception;
+  pragma exception_init(SUPERIOR, -2292);
+begin
+  p_nazwisko := '&nazwisko';
+  select count(*) into p_count from pracownicy where nazwisko = p_nazwisko;
+  if p_count = 0 then
+    raise_application_error(-20020, 'Nie istnieje taki pracownik');
+  elsif p_count > 1 then
+    raise_application_error(-20030, 'Niejednoznaczne wskazanie pracownika');
+  else
+  	delete from pracownicy where nazwisko = p_nazwisko;
+  end if;
+exception
+  when SUPERIOR then
+    raise_application_error(-20040, 'Nie możesz usunąć przełożonego');
 end;
 /
