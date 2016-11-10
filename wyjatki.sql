@@ -28,7 +28,6 @@ declare
 begin
     for szef in c_szefowie
     loop
-    	sys.dbms_output.put_line('szef to ' || szef.szef);
     	if ((szef.placa_szefa + 0.1 * szef.placa_podwladnych) > 2000)
     	then
     		RAISE_APPLICATION_ERROR(-20010, 'Pensja po podwyżce przekroczyłaby 2000!');
